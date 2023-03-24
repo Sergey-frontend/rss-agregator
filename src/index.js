@@ -1,3 +1,3 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import app from './all.js'
+import app from './app.js'
 app()
