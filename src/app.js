@@ -16,9 +16,10 @@ const app = () => {
     },
     urls: [],
   };
+
   const watchedState = watch(state, elements);
 
-  const validate = (url, urls) =>
+  const validateUrl = (url, urls) =>
     yup
       .string()
       .url('Ссылка должна быть валидным URL')
@@ -30,7 +31,7 @@ const app = () => {
     evt.preventDefault();
     const formData = new FormData(evt.target);
     const currentUrl = formData.get('url');
-    validate(currentUrl, watchedState.urls)
+    validateUrl(currentUrl, watchedState.urls)
       .then((link) => {
         watchedState.form.status = 'loading';
         setTimeout(() => {

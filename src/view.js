@@ -1,27 +1,25 @@
 import onChange from 'on-change';
 
-const clear = (elements) => {
+const clear = (elements) => { // очистка feedback и поле ввода
   const { input, feedback } = elements;
   feedback.classList.remove('text-danger');
   feedback.classList.remove('text-warning');
   feedback.classList.remove('text-success');
   input.classList.remove('is-invalid');
-  input.disabled = false;
 };
-const handleError = (errorMessage, elements) => {
+
+const handleError = (errorMessage, elements) => { // добавление ошибки
   const { feedback } = elements;
   feedback.textContent = errorMessage;
 };
-
+/* изменение формы по состоянию */
 const handleForm = (status, elements) => {
-  const { input, feedback, form, button } = elements;
+  const { input, feedback, form } = elements;
   clear(elements);
   switch (status) {
     case 'loading': {
       feedback.classList.add('text-warning');
       feedback.textContent = 'Идёт загрузка...';
-      input.disabled = true;
-      button.setAttribute('disabled', true);
       break;
     }
     case 'success': {
@@ -35,11 +33,11 @@ const handleForm = (status, elements) => {
       input.classList.add('is-invalid');
       break;
     }
-
     default:
-      console.log('unknown status');
+      console.log('Unknown status');
   }
 };
+
 const watch = (state, elements) =>
   onChange(state, (path, value) => {
     switch (path) {
