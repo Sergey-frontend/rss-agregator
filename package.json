@@ -52,7 +52,9 @@
   "dependencies": {
     "bootstrap": "^5.2.3",
     "npm-check-updates": "^16.6.2",
+    "on-change": "^4.0.2",
     "sass": "^1.57.1",
-    "sass-loader": "^13.2.0"
+    "sass-loader": "^13.2.0",
+    "yup": "^1.0.2"
   }
 }
