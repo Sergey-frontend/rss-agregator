@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import i18next from 'i18next';
+import axios from 'axios';
 import watch from './view.js';
 import ru from './locales/ru.js';
 
@@ -57,5 +58,12 @@ const app = async () => {
       });
   });
 };
+
+axios.get('https://allorigins.hexlet.app/get?disableCache=true&url=https://lorem-rss.hexlet.app/feed')
+.then((response) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(response, "text/html");
+  console.log(doc)
+})
 
 export default app;
