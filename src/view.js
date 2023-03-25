@@ -38,20 +38,19 @@ const handleForm = (status, elements) => {
   }
 };
 
-const watch = (state, elements) =>
-  onChange(state, (path, value) => {
-    switch (path) {
-      case 'form.status': {
-        handleForm(value, elements);
-        break;
-      }
-      case 'form.error': {
-        handleError(value, elements);
-        break;
-      }
-      default:
-        console.log('unknowm state');
+const watch = (state, elements) => onChange(state, (path, value) => {
+  switch (path) {
+    case 'form.status': {
+      handleForm(value, elements);
+      break;
     }
-  });
+    case 'form.error': {
+      handleError(value, elements);
+      break;
+    }
+    default:
+      console.log('unknowm state');
+  }
+});
 
 export default watch;
