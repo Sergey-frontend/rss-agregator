@@ -8,23 +8,23 @@ const clear = (elements) => { // очистка feedback и поле ввода
   input.classList.remove('is-invalid');
 };
 
-const handleError = (errorMessage, elements) => { // добавление ошибки
+const handleError = (errorMessage, elements, i18next) => { // добавление ошибки
   const { feedback } = elements;
-  feedback.textContent = errorMessage;
+  feedback.textContent = i18next.t(`errors.${errorMessage}`);
 };
 /* изменение формы по состоянию */
-const handleForm = (status, elements) => {
+const handleForm = (status, elements, i18next) => {
   const { input, feedback, form } = elements;
   clear(elements);
   switch (status) {
     case 'loading': {
       feedback.classList.add('text-warning');
-      feedback.textContent = 'Идёт загрузка...';
+      feedback.textContent = i18next.t(`status.${status}`);
       break;
     }
     case 'success': {
       feedback.classList.add('text-success');
-      feedback.textContent = 'Успешно загружено';
+      feedback.textContent = i18next.t(`status.${status}`);
       form.reset();
       break;
     }
@@ -38,18 +38,18 @@ const handleForm = (status, elements) => {
   }
 };
 
-const watch = (state, elements) => onChange(state, (path, value) => {
+const watch = (state, elements, i18nextInstance) => onChange(state, (path, value) => {
   switch (path) {
     case 'form.status': {
-      handleForm(value, elements);
+      handleForm(value, elements, i18nextInstance);
       break;
     }
     case 'form.error': {
-      handleError(value, elements);
+      handleError(value, elements, i18nextInstance);
       break;
     }
     default:
-      console.log('unknowm state');
+      console.log('unknown state');
   }
 });
 

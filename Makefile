@@ -13,4 +13,7 @@ test:
 lint:
 	npx eslint .
 
+fix:
+	npx eslint . --fix
+
 .PHONY: test

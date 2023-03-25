@@ -1,25 +1,25 @@
 import * as yup from 'yup';
 import i18next from 'i18next';
 import watch from './view.js';
-import ru from './locales/ru.js'
+import ru from './locales/ru.js';
 
 const app = async () => {
-
-  await i18next.init({
+  const i18nextInstance = i18next.createInstance();
+  await i18nextInstance.init({
     lng: 'ru',
     debug: true,
     resources: {
       ru,
     },
   });
-  
+
   const elements = {
     input: document.querySelector('#url-input'),
     feedback: document.querySelector('.feedback'),
     form: document.querySelector('form'),
     button: document.querySelector('button'),
   };
-  
+
   const state = {
     form: {
       status: 'filling',
@@ -27,16 +27,16 @@ const app = async () => {
     },
     urls: [],
   };
-  
-  const watchedState = watch(state, elements);
-  
+
+  const watchedState = watch(state, elements, i18nextInstance);
+
   const validateUrl = (url, urls) => yup
     .string()
-    .url(i18next.t('errors.invalidUrl'))
-    .notOneOf(urls, i18next.t('errors.alreadyLoaded'))
-    .required()
+    .url('invalidUrl')
+    .notOneOf(urls, 'alreadyLoaded')
+    .required('required')
     .validate(url);
-  
+
   elements.form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const formData = new FormData(evt.target);
