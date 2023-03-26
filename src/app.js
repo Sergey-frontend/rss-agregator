@@ -3,16 +3,18 @@ import i18next from 'i18next';
 import axios from 'axios';
 import watch from './view.js';
 import ru from './locales/ru.js';
+import parser from './parser.js';
 
 const app = async () => {
   const i18nextInstance = i18next.createInstance();
   await i18nextInstance.init({
     lng: 'ru',
-    debug: true,
+    debug: false,
     resources: {
       ru,
     },
   });
+  const getProxiedUrl = (url) => `https://allorigins.hexlet.app/get?disableCache=true&url=${url}`;
 
   const elements = {
     input: document.querySelector('#url-input'),
@@ -45,12 +47,16 @@ const app = async () => {
     validateUrl(currentUrl, watchedState.urls)
       .then((link) => {
         watchedState.form.status = 'loading';
-        setTimeout(() => {
-          watchedState.form.status = 'success';
-          watchedState.urls.push(link);
-          console.log(watchedState.urls);
-        }, 2000);
+        watchedState.urls.push(link);
         return link;
+      })
+      .then((url) => {
+        axios.get(getProxiedUrl(url))
+          .then((response) => parser(response.data.contents))
+          .then((data) => console.log(data))
+        // .then(() => document.querySelectorAll('title'))
+        // .then((data) => console.log(data))
+          .then(() => watchedState.form.status = 'success');
       })
       .catch((err) => {
         watchedState.form.status = 'failed';
@@ -58,12 +64,5 @@ const app = async () => {
       });
   });
 };
-
-axios.get('https://allorigins.hexlet.app/get?disableCache=true&url=https://lorem-rss.hexlet.app/feed')
-.then((response) => {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(response, "text/html");
-  console.log(doc)
-})
 
 export default app;
