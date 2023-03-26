@@ -22,6 +22,8 @@ const app = async () => {
     feedback: document.querySelector('.feedback'),
     form: document.querySelector('form'),
     button: document.querySelector('button'),
+    posts: document.querySelector('.posts'),
+    feeds: document.querySelector('.feeds'),
   };
 
   const state = {
@@ -30,6 +32,8 @@ const app = async () => {
       error: null,
     },
     urls: [],
+    feeds: [],
+    posts: [],
   };
 
   const watchedState = watch(state, elements, i18nextInstance);
@@ -48,17 +52,23 @@ const app = async () => {
     validateUrl(currentUrl, watchedState.urls)
       .then((link) => {
         watchedState.form.status = 'loading';
-        watchedState.urls.push(link);
+        watchedState.urls.push(link); // класть ссылку после success
         return link;
       })
-      .then((url) => {
-        axios.get(getProxiedUrl(url))
-          .then((response) => parser(response.data.contents))
-          .then((data) => console.log(renderPosts(data)))
-          .then(() => watchedState.form.status = 'success');
+      .then((link) => axios.get(getProxiedUrl(link)))
+      .then((response) => {
+        console.log(response);
+        const data = parser(response.data.contents);
+        watchedState.feeds.push(data.feed);
+        watchedState.posts = [...data.items];
+        watchedState.form.status = 'success';
       })
       .catch((err) => {
         watchedState.form.status = 'failed';
+        if (err.name === 'AxiosError') {
+          watchedState.form.error = 'network';
+          return;
+        }
         watchedState.form.error = err.message;
       });
   });

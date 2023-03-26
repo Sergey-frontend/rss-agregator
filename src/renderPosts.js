@@ -1,48 +1,58 @@
-export default (data) => {
+// лучше перенести во вью
 
-    const ul = document.createElement('ul');
-    ul.classList.add('list-group', 'border-0', 'rounded-0');
+export default (posts, elements) => {
 
-    const { items } = data
-    items.forEach((item) => {
-        const li = document.createElement('li');
-        li.classList.add('list-group-item', 'd-flex', 'justify-content-between',
-        'align-items-start', 'border-0', 'border-end-0')
-        
-        const a = document.createElement('a')
-        a.textContent = item.title
-        a.classList.add('fw-bold')
-        a.setAttribute('href', item.link)
-        a.setAttribute('data-id', item.id)
-        a.setAttribute('target', '_blank')
-        a.setAttribute('rel', 'noopener noreferrer')
+  const ul = document.createElement('ul');
+  ul.classList.add('list-group', 'border-0', 'rounded-0');
+  ul.innerHTML = '';
 
-        const button = document.createElement('button')
-        button.textContent = 'Просмотр'
-        button.classList.add('btn', 'btn-outline-primary', 'btn-sm')
-        button.setAttribute('type', 'button')
-        button.setAttribute('data-id','2')
-        button.setAttribute('data-bs-toggle', "modal")
-        button.setAttribute('data-bs-target', "#modal")
+  posts.forEach((item) => {
+    const li = document.createElement('li');
+    li.classList.add(
+      'list-group-item',
+      'd-flex',
+      'justify-content-between',
+      'align-items-start',
+      'border-0',
+      'border-end-0',
+    );
 
-        li.append(a)
-        li.append(button)
+    const a = document.createElement('a');
+    a.textContent = item.title;
+    a.classList.add('fw-bold');
+    a.setAttribute('href', item.link);
+    a.setAttribute('data-id', item.id);
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferrer');
 
-        ul.append(li)
-    })
+    const button = document.createElement('button');
+    button.textContent = 'Просмотр'; // i18next
+    button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    button.setAttribute('type', 'button');
+    button.setAttribute('data-id', '2');
+    button.setAttribute('data-bs-toggle', 'modal');
+    button.setAttribute('data-bs-target', '#modal');
 
-    const card = document.createElement('div');
-    card.classList.add('card', 'border-0')
+    li.append(a);
+    li.append(button);
 
-    const cardBody = document.createElement('div');
-    cardBody.classList.add('card-body')
+    ul.append(li);
+  });
 
-    const cardTitle = document.createElement('h2')
-    cardTitle.textContent = 'Посты'
-    cardTitle.classList.add('card-title', 'h4')
+  const card = document.createElement('div');
+  card.classList.add('card', 'border-0');
 
-    cardBody.prepend(cardTitle)
+  const cardBody = document.createElement('div');
+  cardBody.classList.add('card-body');
 
-    card.prepend(cardBody)
-    card.append(ul)
+  const cardTitle = document.createElement('h2');
+  cardTitle.textContent = 'Посты'; // i18next
+  cardTitle.classList.add('card-title', 'h4');
+
+  cardBody.prepend(cardTitle);
+
+  card.prepend(cardBody);
+  card.append(ul);
+
+  elements.posts.prepend(card);
 };
