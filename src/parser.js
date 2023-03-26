@@ -3,7 +3,6 @@ import _ from 'lodash';
 export default (data) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(data, 'text/xml');
-  console.log(doc);
   const feed = {
     id: _.uniqueId(),
     title: doc.querySelector('title').textContent,

@@ -4,6 +4,7 @@ import axios from 'axios';
 import watch from './view.js';
 import ru from './locales/ru.js';
 import parser from './parser.js';
+import renderPosts from './renderPosts.js';
 
 const app = async () => {
   const i18nextInstance = i18next.createInstance();
@@ -53,9 +54,7 @@ const app = async () => {
       .then((url) => {
         axios.get(getProxiedUrl(url))
           .then((response) => parser(response.data.contents))
-          .then((data) => console.log(data))
-        // .then(() => document.querySelectorAll('title'))
-        // .then((data) => console.log(data))
+          .then((data) => console.log(renderPosts(data)))
           .then(() => watchedState.form.status = 'success');
       })
       .catch((err) => {
