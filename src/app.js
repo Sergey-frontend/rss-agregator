@@ -4,7 +4,6 @@ import axios from 'axios';
 import watch from './view.js';
 import ru from './locales/ru.js';
 import parser from './parser.js';
-import renderPosts from './renderPosts.js';
 
 const app = async () => {
   const i18nextInstance = i18next.createInstance();
@@ -52,16 +51,15 @@ const app = async () => {
     validateUrl(currentUrl, watchedState.urls)
       .then((link) => {
         watchedState.form.status = 'loading';
-        watchedState.urls.push(link); // класть ссылку после success
         return link;
       })
       .then((link) => axios.get(getProxiedUrl(link)))
       .then((response) => {
-        console.log(response);
         const data = parser(response.data.contents);
-        watchedState.feeds.push(data.feed);
-        watchedState.posts = [...data.items];
+        watchedState.feeds.unshift(data.feed);
+        watchedState.posts.unshift(data.items);
         watchedState.form.status = 'success';
+        watchedState.urls.push(currentUrl);
       })
       .catch((err) => {
         watchedState.form.status = 'failed';

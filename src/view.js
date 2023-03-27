@@ -1,7 +1,7 @@
 import onChange from 'on-change';
 import renderPosts from './renderPosts';
 
-const clear = (elements) => { // очистка feedback и поле ввода
+const clear = (elements) => {
   const { input, feedback } = elements;
   feedback.classList.remove('text-danger');
   feedback.classList.remove('text-warning');
@@ -9,11 +9,11 @@ const clear = (elements) => { // очистка feedback и поле ввода
   input.classList.remove('is-invalid');
 };
 
-const handleError = (errorMessage, elements, i18next) => { // добавление ошибки
+const handleError = (errorMessage, elements, i18next) => {
   const { feedback } = elements;
   feedback.textContent = i18next.t(`errors.${errorMessage}`);
 };
-/* изменение формы по состоянию */
+
 const handleForm = (status, elements, i18next) => {
   const { input, feedback, form } = elements;
   clear(elements);
@@ -50,7 +50,7 @@ const watch = (state, elements, i18nextInstance) => onChange(state, (path, value
       break;
     }
     case 'posts': {
-      renderPosts(value, elements);
+      renderPosts(value, elements, i18nextInstance);
       break;
     }
     default:

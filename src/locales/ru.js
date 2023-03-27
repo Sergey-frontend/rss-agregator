@@ -11,5 +11,9 @@ export default {
       loading: 'Идёт загрузка',
       success: 'RSS успешно загружен',
     },
+    renderPosts: {
+      button: 'Просмотр',
+      header: 'Посты',
+    },
   },
 };
