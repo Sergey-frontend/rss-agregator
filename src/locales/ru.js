@@ -15,5 +15,8 @@ export default {
       button: 'Просмотр',
       header: 'Посты',
     },
+    renderFeeds: {
+      header: 'Фиды',
+    },
   },
 };

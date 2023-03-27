@@ -1,4 +1,5 @@
 import onChange from 'on-change';
+import renderFeeds from './renderFeeds';
 import renderPosts from './renderPosts';
 
 const clear = (elements) => {
@@ -51,6 +52,10 @@ const watch = (state, elements, i18nextInstance) => onChange(state, (path, value
     }
     case 'posts': {
       renderPosts(value, elements, i18nextInstance);
+      break;
+    }
+    case 'feeds': {
+      renderFeeds(value, elements, i18nextInstance);
       break;
     }
     default:
