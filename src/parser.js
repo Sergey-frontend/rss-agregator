@@ -7,6 +7,7 @@ export default (data) => {
   if (errorNode) {
     throw new Error('invalidRss');
   }
+  
   const feed = {
     id: UniqId,
     title: doc.querySelector('title').textContent,
