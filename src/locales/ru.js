@@ -4,8 +4,9 @@ export default {
       invalidUrl: 'Ссылка должна быть валидным URL',
       alreadyLoaded: 'RSS уже загружен',
       required: 'Обязательное поле',
-      invalidRss: 'Ссылка не содержит валидный RSS', // исправить как по образцу
+      invalidRss: 'Ресурс не содержит валидный RSS',
       network: 'Ошибка сети',
+      unknown: 'Неизвестная ошибка. Что-то пошло не так.',
     },
     status: {
       loading: 'Идёт загрузка',

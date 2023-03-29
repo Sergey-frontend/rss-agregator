@@ -4,6 +4,7 @@ import axios from 'axios';
 import watch from './view.js';
 import ru from './locales/ru.js';
 import parser from './parser.js';
+import build from './build.js';
 
 const app = async () => {
   const i18nextInstance = i18next.createInstance();
@@ -55,7 +56,8 @@ const app = async () => {
       })
       .then((link) => axios.get(getProxiedUrl(link)))
       .then((response) => {
-        const data = parser(response.data.contents);
+        const parsedData = parser(response.data.contents);
+        const data = build(parsedData);
         watchedState.feeds.push(data.feed);
         watchedState.posts.unshift(data.items);
         watchedState.form.status = 'success';
