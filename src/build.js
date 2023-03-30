@@ -1,28 +1,30 @@
-let UniqId = 1;
+import _ from 'lodash';
 
-export default (doc) => {
+export default (doc, currentUrl) => {
   const errorNode = doc.querySelector('parsererror');
   if (errorNode) {
     throw new Error('invalidRss');
   }
+
   try {
     const feed = {
-      id: UniqId,
+      id: _.uniqueId(),
+      url: currentUrl,
       title: doc.querySelector('title').textContent,
       description: doc.querySelector('description').textContent,
     };
     const itemsEl = doc.querySelectorAll('item');
     const items = [];
     itemsEl.forEach((item) => {
-      const id = UniqId;
+      const id = _.uniqueId();
+      const feedId = feed.id;
       const title = item.querySelector('title').textContent;
       const description = item.querySelector('description').textContent;
       const link = item.querySelector('link').textContent;
       items.push({
-        id, title, description, link,
+        id, feedId, title, description, link,
       });
     });
-    UniqId += 1;
     return { feed, items };
   } catch (e) {
     throw new Error('unknown');

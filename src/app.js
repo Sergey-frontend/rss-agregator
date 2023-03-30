@@ -1,11 +1,44 @@
 import * as yup from 'yup';
 import i18next from 'i18next';
 import axios from 'axios';
+import _ from 'lodash';
 import watch from './view.js';
 import ru from './locales/ru.js';
 import parser from './parser.js';
 import build from './build.js';
-import getUpdatePosts from './getUpdatePosts.js';
+
+// https://lorem-rss.hexlet.app/feed?unit=second&interval=5
+const getUpdatePosts = (state) => {
+  const urls = state.feeds.map((feed) => feed.url);
+  const promises = urls.map((url) => axios.get(getProxiedUrl(url))
+    .then((response) => {
+      const parsedData = parser(response.data.contents);
+      const data = build(parsedData, url);
+      console.log(state.posts)
+      const comparator = (arrayValue, otherValue) => arrayValue.title === otherValue.title;
+      const diff = _.differenceWith(data.posts, state.posts, comparator)
+      console.log(diff)
+    })
+    .catch((err) => {
+      console.error(err);
+    }));
+
+  Promise.all(promises).finally(() => setTimeout(() => getUpdatePosts(state), 5000));
+};
+
+const getProxiedUrl = (url) => {
+  const resultUrl = new URL('https://allorigins.hexlet.app/get');
+  resultUrl.searchParams.set('url', url);
+  resultUrl.searchParams.set('disableCache', true);
+  return resultUrl;
+};
+
+const validateUrl = (url, urls) => yup
+  .string()
+  .url('invalidUrl')
+  .notOneOf(urls, 'alreadyLoaded')
+  .required('required')
+  .validate(url);
 
 const app = async () => {
   const i18nextInstance = i18next.createInstance();
@@ -16,7 +49,6 @@ const app = async () => {
       ru,
     },
   });
-  const getProxiedUrl = (url) => `https://allorigins.hexlet.app/get?disableCache=true&url=${url}`;
 
   const elements = {
     input: document.querySelector('#url-input'),
@@ -39,17 +71,11 @@ const app = async () => {
 
   const watchedState = watch(state, elements, i18nextInstance);
 
-  const validateUrl = (url, urls) => yup
-    .string()
-    .url('invalidUrl')
-    .notOneOf(urls, 'alreadyLoaded')
-    .required('required')
-    .validate(url);
-
   elements.form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const formData = new FormData(evt.target);
     const currentUrl = formData.get('url');
+
     validateUrl(currentUrl, watchedState.urls)
       .then((link) => {
         watchedState.form.status = 'loading';
@@ -58,18 +84,11 @@ const app = async () => {
       .then((link) => axios.get(getProxiedUrl(link)))
       .then((response) => {
         const parsedData = parser(response.data.contents);
-        const data = build(parsedData);
+        const data = build(parsedData, currentUrl);
         watchedState.feeds.push(data.feed);
         watchedState.posts.unshift(data.items);
-        watchedState.form.status = 'success';
         watchedState.urls.push(currentUrl);
-        return data.items
-      })
-      .then((posts) => {
-        const postes = posts
-        console.log(`posts: ${JSON.stringify(postes)}`)
-        const prixifiedUrls = state.urls.map(getProxiedUrl);
-        const updatedPosts = getUpdatePosts(prixifiedUrls, postes);
+        watchedState.form.status = 'success';
       })
       .catch((err) => {
         watchedState.form.status = 'failed';
@@ -80,6 +99,7 @@ const app = async () => {
         watchedState.form.error = err.message;
       });
   });
+  getUpdatePosts(watchedState);
 };
 
 export default app;
