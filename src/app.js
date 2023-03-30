@@ -5,6 +5,7 @@ import watch from './view.js';
 import ru from './locales/ru.js';
 import parser from './parser.js';
 import build from './build.js';
+import getUpdatePosts from './getUpdatePosts.js';
 
 const app = async () => {
   const i18nextInstance = i18next.createInstance();
@@ -62,6 +63,13 @@ const app = async () => {
         watchedState.posts.unshift(data.items);
         watchedState.form.status = 'success';
         watchedState.urls.push(currentUrl);
+        return data.items
+      })
+      .then((posts) => {
+        const postes = posts
+        console.log(`posts: ${JSON.stringify(postes)}`)
+        const prixifiedUrls = state.urls.map(getProxiedUrl);
+        const updatedPosts = getUpdatePosts(prixifiedUrls, postes);
       })
       .catch((err) => {
         watchedState.form.status = 'failed';
