@@ -5,32 +5,31 @@ import _ from 'lodash';
 import watch from './view.js';
 import ru from './locales/ru.js';
 import parser from './parser.js';
-import build from './build.js';
-
-// https://lorem-rss.hexlet.app/feed?unit=second&interval=5
-const getUpdatePosts = (state) => {
-  const urls = state.feeds.map((feed) => feed.url);
-  const promises = urls.map((url) => axios.get(getProxiedUrl(url))
-    .then((response) => {
-      const parsedData = parser(response.data.contents);
-      const data = build(parsedData, url);
-      console.log(state.posts)
-      const comparator = (arrayValue, otherValue) => arrayValue.title === otherValue.title;
-      const diff = _.differenceWith(data.posts, state.posts, comparator)
-      console.log(diff)
-    })
-    .catch((err) => {
-      console.error(err);
-    }));
-
-  Promise.all(promises).finally(() => setTimeout(() => getUpdatePosts(state), 5000));
-};
 
 const getProxiedUrl = (url) => {
   const resultUrl = new URL('https://allorigins.hexlet.app/get');
   resultUrl.searchParams.set('url', url);
   resultUrl.searchParams.set('disableCache', true);
   return resultUrl;
+};
+
+const getUpdatePosts = (state) => {
+  const urls = state.feeds.map((feed) => feed.url);
+  const promises = urls.map((url) => axios.get(getProxiedUrl(url))
+    .then((response) => {
+      const data = parser(response.data.contents, url);
+
+      const comparator = (arrayValue, otherValue) => arrayValue.title === otherValue.title;
+      const addedPosts = _.differenceWith(data.items, state.posts, comparator);
+
+      state.posts = addedPosts.concat(...state.posts);
+    })
+    .catch((err) => {
+      console.error(err);
+    }));
+
+  Promise.all(promises)
+    .finally(() => setTimeout(() => getUpdatePosts(state), 5000));
 };
 
 const validateUrl = (url, urls) => yup
@@ -83,8 +82,7 @@ const app = async () => {
       })
       .then((link) => axios.get(getProxiedUrl(link)))
       .then((response) => {
-        const parsedData = parser(response.data.contents);
-        const data = build(parsedData, currentUrl);
+        const data = parser(response.data.contents, currentUrl);
         watchedState.feeds.push(data.feed);
         watchedState.posts.unshift(data.items);
         watchedState.urls.push(currentUrl);
