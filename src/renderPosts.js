@@ -29,7 +29,7 @@ export default (postsList, elements, i18next) => {
     button.textContent = i18next.t('renderPosts.button');
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
     button.setAttribute('type', 'button');
-    button.setAttribute('data-id', '2');
+    button.setAttribute('data-id', item.id);
     button.setAttribute('data-bs-toggle', 'modal');
     button.setAttribute('data-bs-target', '#modal');
 

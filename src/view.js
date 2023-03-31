@@ -40,6 +40,16 @@ const handleForm = (status, elements, i18next) => {
   }
 };
 
+// const renderModal = (state, postId) => {};
+
+const renderVisitedPosts = (idVisitedPosts) => {
+  idVisitedPosts.forEach((id) => {
+    const link = document.querySelector(`a[data-id="${id}"]`);
+    link.classList.remove('fw-bold');
+    link.classList.add('fw-normal', 'link-secondary');
+  });
+};
+
 const watch = (state, elements, i18nextInstance) => onChange(state, (path, value) => {
   switch (path) {
     case 'form.status': {
@@ -56,6 +66,10 @@ const watch = (state, elements, i18nextInstance) => onChange(state, (path, value
     }
     case 'feeds': {
       renderFeeds(value, elements, i18nextInstance);
+      break;
+    }
+    case 'idVisitedPosts': {
+      renderVisitedPosts(value);
       break;
     }
     default:

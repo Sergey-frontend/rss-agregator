@@ -22,6 +22,9 @@ const getUpdatePosts = (state) => {
       const comparator = (arrayValue, otherValue) => arrayValue.title === otherValue.title;
       const addedPosts = _.differenceWith(data.items, state.posts, comparator);
 
+      if (addedPosts.length === 0) {
+        return;
+      }
       state.posts = addedPosts.concat(...state.posts);
     })
     .catch((err) => {
@@ -66,6 +69,8 @@ const app = async () => {
     urls: [],
     feeds: [],
     posts: [],
+    idCurrentpost: null,
+    idVisitedPosts: [],
   };
 
   const watchedState = watch(state, elements, i18nextInstance);
@@ -97,6 +102,18 @@ const app = async () => {
         watchedState.form.error = err.message;
       });
   });
+
+  elements.posts.addEventListener('click', ({ target }) => {
+    if (target.dataset.id) {
+      const { id } = target.dataset;
+      watchedState.idCurrentPost = id;
+      if (!watchedState.idVisitedPosts.includes(id)) {
+        watchedState.idVisitedPosts.push(id);
+      }
+    }
+    return false;
+  });
+
   getUpdatePosts(watchedState);
 };
 
