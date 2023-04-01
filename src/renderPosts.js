@@ -1,12 +1,14 @@
 // лучше перенести во вью
 
-export default (postsList, elements, i18next) => {
+export default (state, postsList, elements, i18next) => {
   const ul = document.createElement('ul');
   ul.classList.add('list-group', 'border-0', 'rounded-0');
 
   const flatPostsList = postsList.flat();
 
   flatPostsList.forEach((item) => {
+    const { id, title, link } = item;
+
     const li = document.createElement('li');
     li.classList.add(
       'list-group-item',
@@ -18,18 +20,23 @@ export default (postsList, elements, i18next) => {
     );
 
     const a = document.createElement('a');
-    a.textContent = item.title;
-    a.classList.add('fw-bold');
-    a.setAttribute('href', item.link);
-    a.setAttribute('data-id', item.id);
+    a.textContent = title;
+    a.setAttribute('href', link);
+    a.setAttribute('data-id', id);
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
+
+    if (state.idVisitedPosts.includes(id)) {
+      a.classList.add('fw-normal');
+    } else {
+      a.classList.add('fw-bold');
+    }
 
     const button = document.createElement('button');
     button.textContent = i18next.t('renderPosts.button');
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
     button.setAttribute('type', 'button');
-    button.setAttribute('data-id', item.id);
+    button.setAttribute('data-id', id);
     button.setAttribute('data-bs-toggle', 'modal');
     button.setAttribute('data-bs-target', '#modal');
 

@@ -61,7 +61,7 @@ const watch = (state, elements, i18nextInstance) => onChange(state, (path, value
       break;
     }
     case 'posts': {
-      renderPosts(value, elements, i18nextInstance);
+      renderPosts(state, value, elements, i18nextInstance);
       break;
     }
     case 'feeds': {

@@ -89,7 +89,7 @@ const app = async () => {
       .then((response) => {
         const data = parser(response.data.contents, currentUrl);
         watchedState.feeds.push(data.feed);
-        watchedState.posts.unshift(data.items);
+        watchedState.posts.unshift(...data.items);
         watchedState.urls.push(currentUrl);
         watchedState.form.status = 'success';
       })
