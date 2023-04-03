@@ -7,12 +7,7 @@ export default (state, postId) => {
   const modal = document.querySelector('.modal');
   const modalTitle = document.querySelector('.modal-title');
   const modalBody = document.querySelector('.modal-body');
-  const modalLink = document.querySelector('.btn-primary');
-
-  modal.classList.add('show');
-  modal.setAttribute('style', 'display: block');
-  modal.setAttribute('aria-modal', 'true');
-  modal.removeAttribute('aria-hidden');
+  const modalLink = document.querySelector('.modal-link');
 
   modal.setAttribute('data-id', id);
   modalTitle.textContent = title;
