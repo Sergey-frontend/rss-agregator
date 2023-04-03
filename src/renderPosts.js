@@ -4,9 +4,7 @@ export default (state, postsList, elements, i18next) => {
   const ul = document.createElement('ul');
   ul.classList.add('list-group', 'border-0', 'rounded-0');
 
-  const flatPostsList = postsList.flat();
-
-  flatPostsList.forEach((item) => {
+  postsList.forEach((item) => {
     const { id, title, link } = item;
 
     const li = document.createElement('li');
