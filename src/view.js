@@ -1,13 +1,17 @@
 import onChange from 'on-change';
 import renderFeeds from './renderFeeds';
 import renderPosts from './renderPosts';
+import renderModal from './renderModal';
 
 const clear = (elements) => {
-  const { input, feedback } = elements;
+  const { input, feedback, button } = elements;
   feedback.classList.remove('text-danger');
   feedback.classList.remove('text-warning');
   feedback.classList.remove('text-success');
   input.classList.remove('is-invalid');
+
+  input.disabled = false;
+  button.disabled = false;
 };
 
 const handleError = (errorMessage, elements, i18next) => {
@@ -16,18 +20,23 @@ const handleError = (errorMessage, elements, i18next) => {
 };
 
 const handleForm = (status, elements, i18next) => {
-  const { input, feedback, form } = elements;
+  const {
+    input, feedback, form, button,
+  } = elements;
   clear(elements);
   switch (status) {
     case 'loading': {
       feedback.classList.add('text-warning');
       feedback.textContent = i18next.t(`status.${status}`);
+      input.disabled = true;
+      button.disabled = true;
       break;
     }
     case 'success': {
       feedback.classList.add('text-success');
       feedback.textContent = i18next.t(`status.${status}`);
       form.reset();
+      input.focus();
       break;
     }
     case 'failed': {
@@ -39,8 +48,6 @@ const handleForm = (status, elements, i18next) => {
       console.log('Unknown status');
   }
 };
-
-// const renderModal = (state, postId) => {};
 
 const renderVisitedPosts = (idVisitedPosts) => {
   idVisitedPosts.forEach((id) => {
@@ -70,6 +77,10 @@ const watch = (state, elements, i18nextInstance) => onChange(state, (path, value
     }
     case 'idVisitedPosts': {
       renderVisitedPosts(value);
+      break;
+    }
+    case 'idCurrentPost': {
+      renderModal(state, value);
       break;
     }
     default:
