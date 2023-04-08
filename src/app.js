@@ -6,6 +6,8 @@ import watch from './view.js';
 import ru from './locales/ru.js';
 import parser from './parser.js';
 
+const DELAY = 5000;
+
 const getProxiedUrl = (url) => {
   const resultUrl = new URL('https://allorigins.hexlet.app/get');
   resultUrl.searchParams.set('url', url);
@@ -32,7 +34,7 @@ const getUpdatePosts = (state) => {
     }));
 
   Promise.all(promises)
-    .finally(() => setTimeout(() => getUpdatePosts(state), 5000));
+    .finally(() => setTimeout(() => getUpdatePosts(state), DELAY));
 };
 
 const validateUrl = (url, urls) => yup
@@ -66,7 +68,6 @@ const app = async () => {
       status: 'filling',
       error: null,
     },
-    urls: [],
     feeds: [],
     posts: [],
     idCurrentpost: null,
@@ -79,18 +80,14 @@ const app = async () => {
     evt.preventDefault();
     const formData = new FormData(evt.target);
     const currentUrl = formData.get('url');
-
-    validateUrl(currentUrl, watchedState.urls)
-      .then((link) => {
-        watchedState.form.status = 'loading';
-        return link;
-      })
+    watchedState.loadingProcess = { status: 'loading', error: null };
+    const urls = state.feeds.map((feed) => feed.url);
+    validateUrl(currentUrl, urls)
       .then((link) => axios.get(getProxiedUrl(link)))
       .then((response) => {
         const data = parser(response.data.contents, currentUrl);
         watchedState.feeds.push(data.feed);
         watchedState.posts.unshift(...data.items);
-        watchedState.urls.push(currentUrl);
         watchedState.form.status = 'success';
       })
       .catch((err) => {

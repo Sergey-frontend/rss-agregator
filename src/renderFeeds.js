@@ -1,12 +1,12 @@
 export default (feedsList, elements, i18next) => {
-  const ul = document.createElement('div');
-  ul.classList.add('list-group', 'border-0', 'rounded-0');
+  const divEl = document.createElement('div');
+  divEl.classList.add('list-group', 'border-0', 'rounded-0');
 
   const flatFeedlist = feedsList.flat();
 
   flatFeedlist.forEach((feed) => {
-    const li = document.createElement('li');
-    li.classList.add('list-group-item', 'border-0', 'border-end-0');
+    const liEL = document.createElement('li');
+    liEL.classList.add('list-group-item', 'border-0', 'border-end-0');
 
     const header = document.createElement('h3');
     header.classList.add('h6', 'm-0');
@@ -16,10 +16,10 @@ export default (feedsList, elements, i18next) => {
     description.classList.add('m-0', 'small', 'text-black-50');
     description.textContent = feed.description;
 
-    li.prepend(description);
-    li.prepend(header);
+    liEL.prepend(description);
+    liEL.prepend(header);
 
-    ul.prepend(li);
+    divEl.prepend(liEL);
   });
 
   const title = document.createElement('h2');
@@ -34,7 +34,7 @@ export default (feedsList, elements, i18next) => {
   card.classList.add('card', 'border-0');
 
   card.prepend(cardBody);
-  card.append(ul);
+  card.append(divEl);
 
   const { feeds } = elements;
   feeds.textContent = '';
