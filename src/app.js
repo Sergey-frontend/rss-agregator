@@ -44,6 +44,13 @@ const validateUrl = (url, urls) => yup
   .required('required')
   .validate(url);
 
+const setIdsForPostsAndFeeds = (data) => {
+  data.feed.id = _.uniqueId();
+  data.items.forEach((item) => {
+    item.id = _.uniqueId();
+  });
+  return data;
+};
 const app = async () => {
   const i18nextInstance = i18next.createInstance();
   await i18nextInstance.init({
@@ -86,8 +93,9 @@ const app = async () => {
       .then((link) => axios.get(getProxiedUrl(link)))
       .then((response) => {
         const data = parser(response.data.contents, currentUrl);
-        watchedState.feeds.push(data.feed);
-        watchedState.posts.unshift(...data.items);
+        const dataWithId = setIdsForPostsAndFeeds(data);
+        watchedState.feeds.push(dataWithId.feed);
+        watchedState.posts.unshift(...dataWithId.items);
         watchedState.form.status = 'success';
       })
       .catch((err) => {
