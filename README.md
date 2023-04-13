@@ -6,7 +6,7 @@ The RSS aggregator allows you to collect all these publications together, and yo
 
 Try it by following this link: https://frontend-project-11-pink-six.vercel.app/
 ### How to use:
-System requirements: node 16.x version at least
+System requirements: node 16.x version
 ```bash
 #clone this repository on your machine
 $git clone git@github.com:Sergey-frontend/RSS-Agregator.git
