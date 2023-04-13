@@ -106,11 +106,11 @@ const app = async () => {
   });
 
   elements.posts.addEventListener('click', ({ target }) => {
-      const { id } = target.dataset;
-      watchedState.idCurrentPost = id;
-      if (!watchedState.idVisitedPosts.includes(id)) {
-        watchedState.idVisitedPosts.push(id);
-      }
+    const { id } = target.dataset;
+    watchedState.idCurrentPost = id;
+    if (!watchedState.idVisitedPosts.includes(id)) {
+      watchedState.idVisitedPosts.push(id);
+    }
   });
 
   getUpdatePosts(watchedState);
