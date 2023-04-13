@@ -84,7 +84,7 @@ const watch = (state, elements, i18nextInstance) => onChange(state, (path, value
       break;
     }
     default:
-      console.log('unknown state');
+      break;
   }
 });
 

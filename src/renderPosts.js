@@ -1,5 +1,3 @@
-// лучше перенести во вью
-
 export default (state, postsList, elements, i18next) => {
   const ul = document.createElement('ul');
   ul.classList.add('list-group', 'border-0', 'rounded-0');

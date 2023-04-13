@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export default (data, currentUrl) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(data, 'text/xml');
@@ -11,7 +9,6 @@ export default (data, currentUrl) => {
 
   try {
     const feed = {
-      id: _.uniqueId(),
       url: currentUrl,
       title: doc.querySelector('title').textContent,
       description: doc.querySelector('description').textContent,
@@ -19,13 +16,11 @@ export default (data, currentUrl) => {
     const itemsEl = doc.querySelectorAll('item');
     const items = [];
     itemsEl.forEach((item) => {
-      const id = _.uniqueId();
-      const feedId = feed.id;
       const title = item.querySelector('title').textContent;
       const description = item.querySelector('description').textContent;
       const link = item.querySelector('link').textContent;
       items.push({
-        id, feedId, title, description, link,
+        title, description, link,
       });
     });
     return { feed, items };
