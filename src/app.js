@@ -19,7 +19,7 @@ const getUpdatePosts = (state) => {
   const urls = state.feeds.map((feed) => feed.url);
   const promises = urls.map((url) => axios.get(getProxiedUrl(url))
     .then((response) => {
-      const data = parser(response.data.contents, url);
+      const data = parser(response.data.contents);
 
       const comparator = (arrayValue, otherValue) => arrayValue.title === otherValue.title;
       const addedPosts = _.differenceWith(data.items, state.posts, comparator);
@@ -44,13 +44,6 @@ const validateUrl = (url, urls) => yup
   .required('required')
   .validate(url);
 
-const setIdsForPostsAndFeeds = (data) => {
-  data.feed.id = _.uniqueId();
-  data.items.forEach((item) => {
-    item.id = _.uniqueId();
-  });
-  return data;
-};
 const app = async () => {
   const i18nextInstance = i18next.createInstance();
   await i18nextInstance.init({
@@ -92,10 +85,14 @@ const app = async () => {
     validateUrl(currentUrl, urls)
       .then((link) => axios.get(getProxiedUrl(link)))
       .then((response) => {
-        const data = parser(response.data.contents, currentUrl);
-        const dataWithId = setIdsForPostsAndFeeds(data);
-        watchedState.feeds.push(dataWithId.feed);
-        watchedState.posts.unshift(...dataWithId.items);
+        const data = parser(response.data.contents);
+        data.feed.id = _.uniqueId();
+        data.feed.url = currentUrl;
+        data.items.forEach((item) => {
+          item.id = _.uniqueId();
+        });
+        watchedState.feeds.push(data.feed);
+        watchedState.posts.unshift(...data.items);
         watchedState.form.status = 'success';
       })
       .catch((err) => {
