@@ -96,6 +96,7 @@ const app = async () => {
         watchedState.form.status = 'success';
       })
       .catch((err) => {
+        console.log(err.message);
         watchedState.form.status = 'failed';
         if (err.name === 'AxiosError') {
           watchedState.form.error = 'network';

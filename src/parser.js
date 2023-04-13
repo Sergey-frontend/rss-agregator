@@ -4,7 +4,10 @@ export default (data) => {
 
   const errorNode = doc.querySelector('parsererror');
   if (errorNode) {
-    throw new Error('invalidRss');
+    const e = new Error();
+    e.name = errorNode.textContent;
+    e.message = 'invalidRss';
+    throw e;
   }
 
   try {
@@ -18,10 +21,13 @@ export default (data) => {
       const title = item.querySelector('title').textContent;
       const description = item.querySelector('description').textContent;
       const link = item.querySelector('link').textContent;
+
       return { title, description, link };
     });
     return { feed, items };
   } catch (e) {
-    throw new Error('unknown');
+    e.message = 'unknown';
+    e.name = 'ParseError';
+    throw e;
   }
 };
