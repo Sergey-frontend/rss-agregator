@@ -13,15 +13,13 @@ export default (data) => {
       description: doc.querySelector('description').textContent,
     };
     const itemsEl = doc.querySelectorAll('item');
-    const items = [];
-    itemsEl.forEach((item) => {
+
+    const items = Array.from(itemsEl).map((item) => {
       const title = item.querySelector('title').textContent;
       const description = item.querySelector('description').textContent;
       const link = item.querySelector('link').textContent;
-      items.push({
-        title, description, link,
-      });
-    });
+      return {title, description, link}
+    })
     return { feed, items };
   } catch (e) {
     throw new Error('unknown');
