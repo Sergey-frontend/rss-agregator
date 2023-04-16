@@ -45,7 +45,7 @@ const handleForm = (status, elements, i18next) => {
       break;
     }
     default:
-      console.log('Unknown status');
+      break;
   }
 };
 
