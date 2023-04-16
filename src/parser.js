@@ -26,8 +26,7 @@ export default (data) => {
     });
     return { feed, items };
   } catch (e) {
-    e.message = 'unknown';
-    e.name = 'ParseError';
+    e.message = 'unableToParseData';
     throw e;
   }
 };
