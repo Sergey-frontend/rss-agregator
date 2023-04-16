@@ -1,3 +1,5 @@
+import { replace } from "lodash";
+
 export default (feedsList, elements, i18next) => {
   const divEl = document.createElement('div');
   divEl.classList.add('list-group', 'border-0', 'rounded-0');
@@ -37,6 +39,5 @@ export default (feedsList, elements, i18next) => {
   card.append(divEl);
 
   const { feeds } = elements;
-  feeds.textContent = '';
-  feeds.prepend(card);
+  feeds.replaceChildren(card)
 };
