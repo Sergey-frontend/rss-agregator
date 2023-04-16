@@ -80,6 +80,7 @@ const app = async () => {
     evt.preventDefault();
     const formData = new FormData(evt.target);
     const currentUrl = formData.get('url');
+
     watchedState.form.status = 'loading';
     const urls = state.feeds.map((feed) => feed.url);
     validateUrl(currentUrl, urls)
@@ -88,9 +89,11 @@ const app = async () => {
         const data = parser(response.data.contents);
         data.feed.id = _.uniqueId();
         data.feed.url = currentUrl;
-        data.items.forEach((item) => {
+        const itemsWithId = Array.from(data.items).map((item) => {
           item.id = _.uniqueId();
+          return item;
         });
+        data.items = itemsWithId;
         watchedState.feeds.push(data.feed);
         watchedState.posts.unshift(...data.items);
         watchedState.form.status = 'success';
