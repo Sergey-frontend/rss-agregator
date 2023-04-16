@@ -59,5 +59,5 @@ export default (state, postsList, elements, i18next) => {
   card.append(ul);
 
   const { posts } = elements;
-  posts.replaceChildren(card)
+  posts.replaceChildren(card);
 };

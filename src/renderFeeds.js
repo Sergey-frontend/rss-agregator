@@ -1,12 +1,8 @@
-import { replace } from "lodash";
-
 export default (feedsList, elements, i18next) => {
   const divEl = document.createElement('div');
   divEl.classList.add('list-group', 'border-0', 'rounded-0');
 
-  const flatFeedlist = feedsList.flat();
-
-  flatFeedlist.forEach((feed) => {
+  feedsList.forEach((feed) => {
     const liEL = document.createElement('li');
     liEL.classList.add('list-group-item', 'border-0', 'border-end-0');
 
@@ -39,5 +35,5 @@ export default (feedsList, elements, i18next) => {
   card.append(divEl);
 
   const { feeds } = elements;
-  feeds.replaceChildren(card)
+  feeds.replaceChildren(card);
 };
