@@ -80,7 +80,6 @@ const app = async () => {
     evt.preventDefault();
     const formData = new FormData(evt.target);
     const currentUrl = formData.get('url');
-    elements.feedback.innerHTML = ''; // test
     watchedState.form.status = 'loading';
     const urls = state.feeds.map((feed) => feed.url);
     validateUrl(currentUrl, urls)

@@ -19,11 +19,13 @@ const handleError = (errorMessage, elements, i18next) => {
   feedback.textContent = i18next.t(`errors.${errorMessage}`);
 };
 
-const handleForm = (status, elements, i18next) => {
+const handleForm = (state, elements, i18next) => {
   const {
     input, feedback, form, button,
   } = elements;
+  const { status } = state.form;
   clear(elements);
+
   switch (status) {
     case 'loading': {
       feedback.classList.add('text-warning');
@@ -42,6 +44,7 @@ const handleForm = (status, elements, i18next) => {
     case 'failed': {
       feedback.classList.add('text-danger');
       input.classList.add('is-invalid');
+      feedback.textContent = i18next.t(`errors.${[state.form.error]}`);
       break;
     }
     default:
@@ -60,7 +63,7 @@ const renderVisitedPosts = (idVisitedPosts) => {
 const watch = (state, elements, i18nextInstance) => onChange(state, (path, value) => {
   switch (path) {
     case 'form.status': {
-      handleForm(value, elements, i18nextInstance);
+      handleForm(state, elements, i18nextInstance);
       break;
     }
     case 'form.error': {
